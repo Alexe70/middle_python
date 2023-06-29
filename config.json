@@ -1,5 +1,0 @@
-{
-    "dbConnect":"sqlite:///hw1.db",
-    "okvedJson":"okved_2.json",
-    "archive":"egrul.json.zip"
-}
