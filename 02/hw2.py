@@ -13,6 +13,7 @@ import json
 with open("config.json", "r") as configFile:
     config = json.loads(configFile.read())
 
+
 class Base(DeclarativeBase):
     pass
 
@@ -132,21 +133,20 @@ list2DB = []    #Обнуляем список с данными для запи
 vacancyCount = 0 #Обнуляем счетсик успешно обработаных вакансий   
 page = 0         #Обнуляем счетчик страниц со списком вакансий
 
-while (vacancyCount <= 100 or page <=20):
-    vacancyList = parsingVacancyList (config['urlSearch'],page)
-    if vacancyList is not None:
-        if len(vacancyList) == 0: 
+while (vacancyCount <= 100): #В этом цикле передираем страницы со списком вакансий, пока не наберем 100 нужных нам вакансий с данными
+    vacancyList = parsingVacancyList (config['urlSearch'],page)     # Через функцию получем список вакансий с одной станицы
+    if vacancyList is not None:                                     # Проверяем, что функция вернула список, т.е. в результате обработки не было ошибок
+        if len(vacancyList) == 0:                                   # Проверяем, что список не пустой. Если список пустой, мы дошли до последней страницы. Завершаем цыкл while
             break
-        for vacancy in vacancyList:
-            insert = parsingVacancy(vacancy.attrs['href'])
-            if insert is not None:
-                list2DB.append(insert)
-                vacancyCount += 1
-            time.sleep(5)
-    print(f"Парсим. Старница: {page}. Вакансий: {vacancyCount}")
-    page += 1
+        for vacancy in vacancyList:                         #Перебираем вакансии из списка
+            insert = parsingVacancy(vacancy.attrs['href'])  #Через функцию получаем данные вакансии
+            if insert is not None:                          #Проверка, что функция вернула данные
+                list2DB.append(insert)                      #Довавляем данные в список, что бы потом записать в БД разом
+                vacancyCount += 1                           #Повышаем счетчик успешно собраных вакансий
+            time.sleep(5)                                   #Делаем паузу, чтобы не заблочили.
+    page += 1                                   
 
-writeDB(list2DB)
+writeDB(list2DB)    #Записываем полученные данные в БД
 
 #################################################################################
 #Начинаем получать вакансии через API
@@ -155,19 +155,18 @@ list2DB = []    #Обнуляем список с данными для запи
 vacancyCount = 0 #Обнуляем счетсик успешно обработаных вакансий   
 page = 0         #Обнуляем счетчик страниц со списком вакансий
 
-while (vacancyCount <= 100 or page <=5):
-    vacancyList = apiVacancyList(config['urlAPI'],page)
-    if len(vacancyList) != 0:
-        for vacancy in vacancyList:
-            if vacancyCount >= 100:
+while (vacancyCount <= 100 or page <=5):                #В этом цикле передираем страницы со списком вакансий, пока не наберем 100 нужных нам вакансий с данными. На всякий случай не уходим дальше 5 старницы, что бы не получить вечный цыкл.
+    vacancyList = apiVacancyList(config['urlAPI'],page) #Через функцию получем список вакансий с одной станицы
+    if len(vacancyList) != 0:                           #Проверяем, что список не пустой. Если во время обработки страницы произойдет ошибка, функция вернет пустой список.
+        for vacancy in vacancyList:             #Перебираем вакансии из списка
+            if vacancyCount >= 100:             #Если набрали 100 вакансий, заканчиваем перебор. 
                 break
-            insert = apiVacancy(vacancy)
-            if insert is not None:
-                list2DB.append(insert)
-                vacancyCount += 1
+            insert = apiVacancy(vacancy)        #Через функцию получаем данные вакансии
+            if insert is not None:              #Проверка, что функция вернула данные
+                list2DB.append(insert)          #Довавляем данные в список, что бы потом записать в БД разом
+                vacancyCount += 1               #Повышаем счетчик успешно собраных вакансий
     else: 
         break
-    print(f"API. Старница: {page}. Вакансий: {vacancyCount}")
     page += 1
 
-writeDB(list2DB)
+writeDB(list2DB)    #Записываем полученные данные в БД
