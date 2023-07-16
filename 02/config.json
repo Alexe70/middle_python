@@ -1,0 +1,6 @@
+{
+    "dbConnect":"sqlite:///hw2.db",
+    "user_agent": {"User-agent": "Mozilla/5.0"},
+    "urlSearch":"https://hh.ru/search/vacancy?text=middle+python+developer",
+    "urlAPI":"https://api.hh.ru/vacancies"
+}
