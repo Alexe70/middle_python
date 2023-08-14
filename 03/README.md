@@ -1,6 +1,6 @@
 <html>
 <h3  align="center">ДЗ№ 3</h3><br>
-<img src="https://github.com/Alexe70/middle_python/tree/main/03/AirFlowGraph.jpg">
+<img src="https://github.com/Alexe70/middle_python/blob/main/03/AirFlowGraph.jpg">
 <li>скопировать hw3.py и config.json в корневую папку Airflow dags.
 <br>
 <hr>
