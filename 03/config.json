@@ -1,0 +1,7 @@
+{
+    "urlEGRUL":"https://ofdata.ru/open-data/download/egrul.json.zip",
+    "archive":"/Users/alexe70/egrul.json.zip",
+    "urlAPI":"https://api.hh.ru/vacancies",
+    "csvAllSkills":"/Users/alexe70/all_skills.csv",
+    "csvTOPSkills":"/Users/alexe70/top10_skills.csv"
+}
